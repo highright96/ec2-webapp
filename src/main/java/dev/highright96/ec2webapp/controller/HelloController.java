@@ -5,11 +5,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/api/hello")
+@RequestMapping("/api")
 public class HelloController {
 
-    @GetMapping
-    public String hello() {
+    @GetMapping("/hello1")
+    public String hello1() {
         return "hello";
+    }
+
+    @GetMapping("/hello2")
+    public String hello2() {
+        return "hello2";
     }
 }
