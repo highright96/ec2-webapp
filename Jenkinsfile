@@ -20,9 +20,9 @@ pipeline {
         }
         failure {
           error 'Build Failure -> Stop'
-          mail to: 'highright96@gmail.com'
-               subject: 'Jenkins Failure Email'
-               body: 'Git Clone Failed.'
+          mail to: 'highright96@gmail.com',
+               subject: "Jenkins Failure Email",
+               body: "Git Clone Failed."
         }
       }
     }
@@ -31,7 +31,10 @@ pipeline {
       agent any
       steps {
         echo 'Build Start'
-        sh './gradlew clean build'
+        sh """
+        chmod 755 ./gradlew
+        ./gradlew clean build
+        """
       }
       post {
         success {
@@ -39,9 +42,9 @@ pipeline {
         }
         failure {
           error 'Build Failure -> Stop'
-          mail to: 'highright96@gmail.com'
-               subject: 'Jenkins Failure Build'
-               body: 'Build Failed.'
+          mail to: 'highright96@gmail.com',
+               subject: "Jenkins Failure Build",
+               body: "Build Failed."
         }
       }
     }
@@ -51,6 +54,7 @@ pipeline {
       steps {
         echo 'Deploy Start'
         sh """
+        docker stop ${CONTAINER_NAME}
         docker rm ${CONTAINER_NAME}
         docker rmi ${IMAGE_NAME}
         docker build -t ${IMAGE_NAME} .
@@ -59,15 +63,15 @@ pipeline {
       }
       post {
         success {
-          mail to: 'highright96@gmail.com'
-               subject: 'Jenkins Success Deploy'
-               body: 'Deploy Success'
+          mail to: 'highright96@gmail.com',
+               subject: "Jenkins Success Deploy",
+               body: "Deploy Success"
         }
         failure {
           error 'Build Failure -> Stop'
-          mail to: 'highright96@gmail.com'
-               subject: 'Jenkins Failure Deploy'
-               body: 'Deploy Failed.'
+          mail to: 'highright96@gmail.com',
+               subject: "Jenkins Failure Deploy",
+               body: "Deploy Failed."
         }
       }
     }
