@@ -51,7 +51,6 @@ pipeline {
       steps {
         echo 'Deploy Start'
         sh """
-        docker stop env.
         docker rm ${CONTAINER_NAME}
         docker rmi ${IMAGE_NAME}
         docker build -t ${IMAGE_NAME} .
@@ -61,8 +60,14 @@ pipeline {
       post {
         success {
           mail to: 'highright96@gmail.com'
-               subject: 'Jenkins Success Build'
+               subject: 'Jenkins Success Deploy'
                body: 'Deploy Success'
+        }
+        failure {
+          error 'Build Failure -> Stop'
+          mail to: 'highright96@gmail.com'
+               subject: 'Jenkins Failure Deploy'
+               body: 'Deploy Failed.'
         }
       }
     }
