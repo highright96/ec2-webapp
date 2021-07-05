@@ -13,11 +13,16 @@ pipeline {
         echo 'Clone Repository Start'
         git url: 'https://github.com/highright96/jenkins.git',
           branch: 'master'
-          credentialId: 'github'
       }
       post {
         success {
           echo 'Cloned Repository Success'
+        }
+        failure {
+          error 'Build Failure -> Stop'
+          mail to: 'highright96@gmail.com'
+               subject: 'Jenkins Failure Email'
+               body: 'Git Clone Failed.'
         }
       }
     }
@@ -34,6 +39,9 @@ pipeline {
         }
         failure {
           error 'Build Failure -> Stop'
+          mail to: 'highright96@gmail.com'
+               subject: 'Jenkins Failure Build'
+               body: 'Build Failed.'
         }
       }
     }
@@ -53,8 +61,8 @@ pipeline {
       post {
         success {
           mail to: 'highright96@gmail.com'
-               subject: '배포 성공'
-               body: '배포를 성공했습니다.'
+               subject: 'Jenkins Success Build'
+               body: 'Deploy Success'
         }
       }
     }

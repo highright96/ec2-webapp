@@ -15,9 +15,4 @@ public class test {
         Assertions.assertThat(2).isEqualTo(2);
     }
 
-    @Test
-    void test3(){
-        Assertions.assertThat(3).isEqualTo(4);
-    }
-
 }
