@@ -1,6 +1,5 @@
 pipeline {
   agent any
-
   environment {
     CONTAINER_NAME = 'ec2'
     IMAGE_NAME = 'ec2:latest'
@@ -8,7 +7,6 @@ pipeline {
 
   stages {
     stage('git clone'){
-      agent any
       steps {
         echo 'Clone Repository Start'
         git url: 'https://github.com/highright96/jenkins.git',
@@ -20,15 +18,11 @@ pipeline {
         }
         failure {
           error 'Build Failure -> Stop'
-          mail to: 'highright96@gmail.com',
-               subject: "Jenkins Failure Email",
-               body: "Git Clone Failed."
         }
       }
     }
 
     stage('build'){
-      agent any
       steps {
         echo 'Build Start'
         sh """
@@ -50,7 +44,6 @@ pipeline {
     }
 
     stage('deploy'){
-      agent any
       steps {
         echo 'Deploy Start'
         sh """
@@ -68,7 +61,7 @@ pipeline {
                body: "Deploy Success"
         }
         failure {
-          error 'Build Failure -> Stop'
+          error 'Deploy Failure -> Stop'
           mail to: 'highright96@gmail.com',
                subject: "Jenkins Failure Deploy",
                body: "Deploy Failed."
